@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Cash - Personal Finance Manager</title>
+    
+    <!-- PREMIUM FONT IMPORT (General Sans & Satoshi) -->
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@600,700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <!-- AOS (Animate On Scroll) Library CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Your App Logo for the browser tab -->
+    <link rel="icon" href="logo.png" type="image/png">
+
+    <style>
+        /* ---
+           FINAL "FULL POWER" STYLESHEET V4
+           ENHANCEMENTS: Animated BG, Gradient Text, 3D Tilt, Count-Up Metrics
+        --- */
+        :root {
+            --font-heading: 'General Sans', sans-serif;
+            --font-body: 'Satoshi', sans-serif;
+            --accent-gradient: linear-gradient(90deg, #33DDCB 0%, #10B981 100%);
+            --accent-color: #10B981;
+            --dark-bg: #0D1117;
+            --card-bg: #161B22;
+            --text-primary: #E6EDF3;
+            --text-secondary: #8B949E;
+            --border-color: #30363D;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            background-color: var(--dark-bg);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Ambient Animated Background --- */
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #0D1117, #161B22, #0D1117, #010409);
+            background-size: 400% 400%;
+            animation: gradient-flow 15s ease infinite;
+        }
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Preloader Styles --- */
+        .preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--dark-bg); display: flex; justify-content: center;
+            align-items: center; z-index: 9999; transition: opacity 0.75s ease, visibility 0.75s ease;
+        }
+        .preloader img { width: 80px; animation: pulse 1.5s ease-in-out infinite; }
+        .preloader.fade-out { opacity: 0; visibility: hidden; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
+
+        .page-wrapper { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .app-store-section { display: flex; flex-direction: column; gap: 30px; }
+
+        h1, h2 { font-family: var(--font-heading); font-weight: 700; color: var(--text-primary); }
+        h1 { font-size: clamp(2rem, 5vw, 2.5rem); }
+        h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+        p { font-weight: 500; }
+        
+        .gradient-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .app-header { display: flex; align-items: center; gap: 20px; }
+        .app-icon { width: 80px; height: 80px; border-radius: 16px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .app-title-group { display: flex; flex-direction: column; gap: 2px; }
+        .app-title-group h1 { margin: 0; }
+        .app-developer { font-family: var(--font-heading); font-size: clamp(1rem, 3vw, 1.1rem); font-weight: 600; color: var(--accent-color); }
+        .app-purchase-note { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .app-metrics { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+        .metric-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 10px 0; }
+        .metric-item:nth-child(2) { border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
+        .metric-value { font-family: var(--font-heading); font-weight: 600; font-size: 1rem; color: var(--text-primary); }
+        .metric-label { font-size: 0.8rem; color: var(--text-secondary); }
+        .age-rating-box { border: 1px solid var(--text-secondary); padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+
+        /* --- Interactive 3D Button --- */
+        .install-button-wrapper {
+            perspective: 1000px;
+        }
+        .install-button {
+            display: block; width: 100%; text-align: center; padding: 14px;
+            border-radius: 8px; background-image: var(--accent-gradient);
+            color: var(--dark-bg); font-family: var(--font-heading);
+            font-weight: 700; font-size: 1.1rem; text-decoration: none;
+            transition: all 0.2s ease-out; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+        }
+        .install-button:hover {
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        .device-info { text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary); }
+        .device-info i { margin-right: 5px; }
+        
+        /* --- Enhanced Screenshots Section --- */
+        .app-screenshots { display: flex; gap: 20px; overflow-x: auto; padding: 10px; -ms-overflow-style: none; scrollbar-width: none; }
+        .app-screenshots::-webkit-scrollbar { display: none; }
+        .screenshot-card { flex: 0 0 70%; max-width: 300px; text-align: center; perspective: 1000px; }
+        .screenshot-card h3 { font-family: var(--font-heading); font-weight: 600; font-size: 1rem; margin-bottom: 8px; }
+        .screenshot-card p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5; }
+        .screenshot-card img { width: 100%; border-radius: 12px; border: 1px solid var(--border-color); transition: transform 0.3s ease; }
+        .screenshot-card:hover img { transform: scale(1.03) rotateY(2deg) rotateX(-2deg); }
+        
+        .app-about { border-top: 1px solid var(--border-color); padding-top: 30px; }
+        .about-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .about-header h2 { margin: 0; }
+        .about-header a { text-decoration: none; }
+        .about-header i { font-size: 1.5rem; color: var(--text-secondary); }
+        .about-text { color: var(--text-secondary); line-height: 1.6; }
+
+        .features { padding: 80px 0; border-top: 1px solid var(--border-color); margin-top: 30px; }
+        .features h2 { text-align: center; margin-bottom: 50px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        
+        .feature-card { background-color: var(--card-bg); padding: 30px; text-align: center; border-radius: 12px; border: 1px solid var(--border-color); transition: all 0.3s ease; position: relative; }
+        .feature-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 12px; padding: 1px; background: linear-gradient(45deg, var(--accent-color), #33DDCB); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.3s ease; }
+        .feature-card:hover { transform: translateY(-8px); border-color: transparent; }
+        .feature-card:hover::before { opacity: 1; }
+        .icon-wrapper { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background-color: rgba(16, 185, 129, 0.1); margin-bottom: 20px; }
+        .icon-wrapper i { font-size: 1.5rem; color: var(--accent-color); }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 600; margin: 0; }
+        .feature-card p { font-size: 0.9rem; margin-top: 10px; }
+
+        .footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 30px; }
+        .footer-container { display: flex; flex-direction: column; align-items: center; gap: 20px; color: var(--text-secondary); }
+        .footer .logo { display: flex; align-items: center; font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: var(--text-primary); text-decoration: none; }
+        .footer .logo img { height: 30px; margin-right: 8px; }
+        .social-links a { color: var(--text-secondary); font-size: 1.5rem; margin: 0 10px; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--accent-color); transform: scale(1.2) translateY(-3px); }
+
+        @media (max-width: 768px) { .features-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
+        @media (max-width: 480px) { .app-icon { width: 60px; height: 60px; border-radius: 12px; } .screenshot-card { flex-basis: 80%; } }
+    </style>
+</head>
+<body class="animated-gradient-bg">
+
+    <div class="preloader"><img src="logo.png" alt="Loading..."></div>
+
+    <div class="page-wrapper">
+        <main class="app-store-section" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
+
+            <section class="app-header">
+                <img src="logo.png" alt="Cash App Logo" class="app-icon">
+                <div class="app-title-group">
+                    <h1 class="gradient-text">Cash</h1>
+                    <span class="app-developer">Built by Aditya</span>
+                    <span class="app-purchase-note">100% Free & No Ads</span>
+                </div>
+            </section>
+
+            <section class="app-metrics" id="metrics-section">
+                <div class="metric-item">
+                    <span class="metric-value counter" data-target="4.5" data-suffix=" ★">0</span>
+                    <span class="metric-label">1K+ reviews</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value counter" data-target="100" data-suffix="+">0</span>
+                    <span class="metric-label">Downloads</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value age-rating-box">v1.7</span>
+                    <span class="metric-label">Everyone</span>
+                </div>
+            </section>
+
+            <div class="install-button-wrapper">
+                <a href="cash_app.apk" download class="install-button">Install</a>
+            </div>
+            <p class="device-info"><i class="fas fa-mobile-alt"></i> Requires Android 8.0+</p>
+
+            <section class="app-screenshots" data-aos="zoom-in-up" data-aos-delay="300">
+                <div class="screenshot-card"><h3>Visual Insights</h3><p>See exactly where your money goes with beautiful, easy-to-understand charts.</p><img src="screenshot-analytics.png" alt="Analytics screen with pie chart."></div>
+                <div class="screenshot-card"><h3>Smart Budgets</h3><p>Set monthly budgets for categories like shopping or dining to stay in control.</p><img src="screenshot-budgets.png" alt="Budget screen with progress bars."></div>
+                <div class="screenshot-card"><h3>Achieve Your Goals</h3><p>Create savings goals for anything and track your progress to stay motivated.</p><img src="screenshot-goals.png" alt="Savings goals screen."></div>
+            </section>
+
+            <section class="app-about">
+                <div class="about-header"><h2>About this app</h2><a href="#features"><i class="fas fa-arrow-right"></i></a></div>
+                <p class="about-text">"Cash" is a complete personal finance manager designed to help you track income, control expenses, and achieve your financial goals. Get a clear overview of your money with powerful tools, all in a simple, private, and offline-first application.</p>
+            </section>
+        </main>
+        
+        <section id="features" class="features">
+            <h2 data-aos="fade-up" class="gradient-text">Designed for Clarity and Power</h2>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100"><div class="icon-wrapper"><i class="fas fa-wallet"></i></div><h3>Multi-Account Tracking</h3><p>Manage personal, home, and business finances in separate ledgers.</p></div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200"><div class="icon-wrapper"><i class="fas fa-bolt-lightning"></i></div><h3>Effortless Transactions</h3><p>Add income or expenses in seconds with a clean, intuitive interface.</p></div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300"><div class="icon-wrapper"><i class="fas fa-palette"></i></div><h3>Custom Themes</h3><p>Choose between a beautiful light or dark theme to fit your style.</p></div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400"><div class="icon-wrapper"><i class="fas fa-chart-line"></i></div><h3>Real-Time Balance</h3><p>Your balance updates instantly. Always know exactly where you stand.</p></div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500"><div class="icon-wrapper"><i class="fas fa-lock"></i></div><h3>Secure & Offline</h3><p>Your data is stored encrypted on your device and never leaves it.</p></div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="600"><div class="icon-wrapper"><i class="fas fa-calendar-check"></i></div><h3>Complete Control</h3><p>Easily edit transaction dates, times, and descriptions for flawless records.</p></div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-container" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+                <a href="#" class="logo"><img src="logo.png" alt="Cash App Logo"><span>Cash</span></a>
+                <p>© 2024 Built by Aditya. All rights reserved.</p>
+                <div class="social-links"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-github"></i></a></div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // --- Preloader ---
+        const preloader = document.querySelector('.preloader');
+        window.addEventListener('load', () => preloader.classList.add('fade-out'));
+        
+        // --- AOS Initialization ---
+        AOS.init({ duration: 800, once: true, offset: 50 });
+
+        // --- 3D Magnetic Button Logic ---
+        const buttonWrapper = document.querySelector('.install-button-wrapper');
+        const button = document.querySelector('.install-button');
+        buttonWrapper.addEventListener('mousemove', e => {
+            const { left, top, width, height } = buttonWrapper.getBoundingClientRect();
+            const x = (e.clientX - left - width / 2) * 0.1;
+            const y = (e.clientY - top - height / 2) * 0.1;
+            button.style.transform = `rotateY(${x}deg) rotateX(${-y}deg) translateZ(5px)`;
+        });
+        buttonWrapper.addEventListener('mouseleave', () => {
+            button.style.transform = 'rotateY(0deg) rotateX(0deg) translateZ(0px)';
+        });
+      
+        // --- Dynamic Counter Logic ---
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // The lower the #, the faster the count
+        const startCounters = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    counters.forEach(counter => {
+                        const animate = () => {
+                            const target = +counter.getAttribute('data-target');
+                            const suffix = counter.getAttribute('data-suffix') || '';
+                            const count = +counter.innerText.replace(suffix, '');
+                            const increment = target / speed;
+                            if (count < target) {
+                                const newCount = Math.ceil(count + increment);
+                                if (Number.isInteger(target)) {
+                                    counter.innerText = Math.min(newCount, target) + suffix;
+                                } else {
+                                    counter.innerText = Math.min(newCount, target).toFixed(1) + suffix;
+                                }
+                                setTimeout(animate, 1);
+                            } else {
+                                counter.innerText = (Number.isInteger(target) ? target : target.toFixed(1)) + suffix;
+                            }
+                        };
+                        animate();
+                    });
+                    observer.unobserve(entry.target); // Stop observing after animation
+                }
+            });
+        };
+        const observer = new IntersectionObserver(startCounters, { threshold: 0.8 });
+        const metricsSection = document.getElementById('metrics-section');
+        if (metricsSection) {
+            observer.observe(metricsSection);
+        }
+
+    </script>
+</body>
+</html>
